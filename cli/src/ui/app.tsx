@@ -113,7 +113,7 @@ export function App({ agentName, modelOverride, config, mode, verbose, initialMe
         </Text>
       )}
       {status === "submitted" && <ThinkingIndicator />}
-      {status === "streaming" && streamingMessage && (
+      {status === "streaming" && streamingMessage && !activeAskUser && !activeApproval && (
         <MessageItem message={streamingMessage} />
       )}
       <TodoList todos={todos} />

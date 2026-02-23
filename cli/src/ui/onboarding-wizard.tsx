@@ -77,32 +77,10 @@ const API_KEY_OPTIONS: { id: ApiKeyMethod; label: string; description: string }[
   },
 ];
 
-function WelcomeHeader() {
-  return (
-    <Box
-      borderStyle="round"
-      borderColor={colors.signature}
-      paddingX={1}
-      marginBottom={1}
-    >
-      <Text bold color={colors.signature}>
-        {" "}WellGrow{" "}
-      </Text>
-      <Text color={colors.fog}>|</Text>
-      <Text color={colors.energy}> セットアップ </Text>
-    </Box>
-  );
-}
-
 function BotMessage({ children }: { children: React.ReactNode }) {
   return (
     <Box flexDirection="column" marginBottom={1}>
-      <Text bold color={colors.signature}>
-        WellGrow
-      </Text>
-      <Box marginLeft={2} flexDirection="column">
-        {children}
-      </Box>
+      {children}
     </Box>
   );
 }
@@ -243,11 +221,9 @@ function OnboardingWizard({ onComplete }: Props) {
 
   return (
     <Box flexDirection="column">
-      <WelcomeHeader />
-
       <BotMessage>
-        <Text>こんにちは！WellGrow CLIへようこそ。</Text>
-        <Text>あなただけのAIアシスタントをセットアップしましょう。</Text>
+        <Text>やっほぉー！✨ ようこそ！</Text>
+        <Text>あなただけのAIアシスタントをセットアップしよう 😊</Text>
       </BotMessage>
 
       {step === "welcome" && (
@@ -256,7 +232,7 @@ function OnboardingWizard({ onComplete }: Props) {
 
       {step !== "welcome" && (
         <BotMessage>
-          <Text>まず、お名前を教えてください。</Text>
+          <Text>まず、お名前を教えてくれるかな？ 🌈</Text>
         </BotMessage>
       )}
 
@@ -276,7 +252,7 @@ function OnboardingWizard({ onComplete }: Props) {
 
       {pastNameSteps.includes(step) && (
         <BotMessage>
-          <Text>{name}さん、よろしくお願いします！</Text>
+          <Text>{name}さんだね！よろしくね〜！🎉</Text>
         </BotMessage>
       )}
 
@@ -284,8 +260,8 @@ function OnboardingWizard({ onComplete }: Props) {
       {step === "apiKeyMethod" && (
         <>
           <BotMessage>
-            <Text>次に、AIと会話するためのAPIキーを設定しましょう。</Text>
-            <Text>取得方法を選んでください:</Text>
+            <Text>次に、AIと会話するためのAPIキーを設定するよ！💪</Text>
+            <Text>取得方法を選んでね:</Text>
           </BotMessage>
           <MethodSelector onSelect={handleMethodSelect} />
         </>
@@ -301,12 +277,12 @@ function OnboardingWizard({ onComplete }: Props) {
       {/* setup-token guide */}
       {step === "setupTokenGuide" && (
         <BotMessage>
-          <Text>別のターミナルで以下のコマンドを実行してください:</Text>
+          <Text>別のターミナルで、このコマンドを実行してね:</Text>
           <Text />
           <Text color={colors.insight}>{"  $ "}<Text bold>claude setup-token</Text></Text>
           <Text />
-          <Text>表示される sk-ant- で始まるAPIキーを貼り付けてください:</Text>
-          <Text color={colors.fog}>（※ Authentication Code ではなく、その後に表示されるAPIキーです）</Text>
+          <Text>出てきた sk-ant- で始まるAPIキーを貼り付けてね！✨</Text>
+          <Text color={colors.fog}>（※ Authentication Code じゃなくて、その後に表示されるAPIキーだよ）</Text>
         </BotMessage>
       )}
 
@@ -321,14 +297,14 @@ function OnboardingWizard({ onComplete }: Props) {
       {step === "apiKeyInput" && (
         <>
           <BotMessage>
-            <Text>Anthropic の API キーを入力してください。</Text>
+            <Text>Anthropic の API キーを入力してね！</Text>
             <Text />
             <Text color={colors.insight}>
               {"💡 "}
               <Text color={colors.flow} underline>
                 https://console.anthropic.com/settings/keys
               </Text>
-              {" から取得できます"}
+              {" から取得できるよ"}
             </Text>
           </BotMessage>
           <Box>
@@ -340,21 +316,21 @@ function OnboardingWizard({ onComplete }: Props) {
 
       {step === "apiKeySubmitted" && (
         <BotMessage>
-          <Text>APIキーを設定しています...</Text>
+          <Text>APIキーを設定してるよ... ⏳</Text>
         </BotMessage>
       )}
 
       {step === "apiKeyCheck" && (
         <BotMessage>
-          <Text color={colors.growth}>{"✓ "}<Text>APIキーは既に設定されていますね。</Text></Text>
+          <Text color={colors.growth}>{"✓ "}<Text>APIキーはもう設定されてるね！</Text></Text>
         </BotMessage>
       )}
 
       {(step === "saving" || step === "done") && (
         <BotMessage>
-          <Text color={colors.growth}>{"✓ "}<Text>設定完了！</Text></Text>
+          <Text color={colors.growth}>{"✓ "}<Text>設定完了！わぉおぉぉ！🎊</Text></Text>
           <Text />
-          <Text>これからAIアシスタントがセットアップの続きをお手伝いします。</Text>
+          <Text>これからAIアシスタントがセットアップの続きをお手伝いするね！✨</Text>
         </BotMessage>
       )}
 
