@@ -37,6 +37,33 @@ export function isValidApiKey(value: string): boolean {
   return trimmed.length > 0 && trimmed.startsWith("sk-ant-");
 }
 
+// ink-text-input v6 has a paste truncation bug on Linux/WSL where long pasted
+// strings are split across multiple input events, losing characters (Issue #90).
+// This component uses useInput directly to handle paste correctly.
+function MaskedInput({ onSubmit, placeholder }: { onSubmit: (value: string) => void; placeholder?: string }) {
+  const [value, setValue] = useState("");
+
+  useInput((input, key) => {
+    if (key.return) {
+      onSubmit(value);
+      return;
+    }
+    if (key.backspace || key.delete) {
+      setValue((prev) => prev.slice(0, -1));
+      return;
+    }
+    if (key.ctrl || key.meta || key.escape || key.upArrow || key.downArrow || key.leftArrow || key.rightArrow || key.tab) {
+      return;
+    }
+    setValue((prev) => prev + input);
+  });
+
+  if (value.length === 0 && placeholder) {
+    return <Text dimColor>{placeholder}</Text>;
+  }
+  return <Text>{"*".repeat(value.length)}</Text>;
+}
+
 const API_KEY_OPTIONS: { id: ApiKeyMethod; label: string; description: string }[] = [
   {
     id: "setup-token",
@@ -133,7 +160,6 @@ function OnboardingWizard({ onComplete }: Props) {
   const [name, setName] = useState("");
   const [nameValue, setNameValue] = useState("");
   const [apiKey, setApiKey] = useState("");
-  const [apiKeyValue, setApiKeyValue] = useState("");
   const [hasEnvKey, setHasEnvKey] = useState(false);
   const [chosenMethod, setChosenMethod] = useState<ApiKeyMethod | null>(null);
 
@@ -197,10 +223,12 @@ function OnboardingWizard({ onComplete }: Props) {
   }, []);
 
   const handleApiKeySubmit = useCallback((value: string) => {
-    if (!isValidApiKey(value)) return;
-    setApiKey(value.trim());
+    const trimmed = value.trim();
+    if (trimmed.length === 0) return;
+    if (chosenMethod === "api-key" && !trimmed.startsWith("sk-ant-")) return;
+    setApiKey(trimmed);
     setStep("apiKeySubmitted");
-  }, []);
+  }, [chosenMethod]);
 
   const pastNameSteps: Step[] = [
     "nameSubmitted", "apiKeyCheck", "apiKeyMethod",
@@ -277,20 +305,15 @@ function OnboardingWizard({ onComplete }: Props) {
           <Text />
           <Text color={colors.insight}>{"  $ "}<Text bold>claude setup-token</Text></Text>
           <Text />
-          <Text>取得したトークンを貼り付けてください:</Text>
+          <Text>表示される sk-ant- で始まるAPIキーを貼り付けてください:</Text>
+          <Text color={colors.fog}>（※ Authentication Code ではなく、その後に表示されるAPIキーです）</Text>
         </BotMessage>
       )}
 
       {(step === "setupTokenGuide" || step === "setupTokenInput") && (
         <Box>
           <Text color={colors.joy}>{"❯ "}</Text>
-          <TextInput
-            value={apiKeyValue}
-            onChange={setApiKeyValue}
-            onSubmit={handleApiKeySubmit}
-            mask="*"
-            placeholder="sk-ant-..."
-          />
+          <MaskedInput onSubmit={handleApiKeySubmit} placeholder="sk-ant-..." />
         </Box>
       )}
 
@@ -310,13 +333,7 @@ function OnboardingWizard({ onComplete }: Props) {
           </BotMessage>
           <Box>
             <Text color={colors.joy}>{"❯ "}</Text>
-            <TextInput
-              value={apiKeyValue}
-              onChange={setApiKeyValue}
-              onSubmit={handleApiKeySubmit}
-              mask="*"
-              placeholder="sk-ant-..."
-            />
+            <MaskedInput onSubmit={handleApiKeySubmit} placeholder="sk-ant-..." />
           </Box>
         </>
       )}
