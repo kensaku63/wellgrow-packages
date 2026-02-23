@@ -1,0 +1,35 @@
+{
+  "name": "@wellgrow/mcp",
+  "version": "0.2.0",
+  "description": "WellGrow MCP Server — Access your personal knowledge base from AI agents",
+  "type": "module",
+  "bin": {
+    "wellgrow-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@ai-sdk/openai": "^1.0.0",
+    "@modelcontextprotocol/sdk": "^1.26.0",
+    "@supabase/supabase-js": "^2.49.0",
+    "ai": "^4.0.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "UNLICENSED",
+  "private": false
+}

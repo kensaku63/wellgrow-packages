@@ -1,0 +1,19 @@
+[agent]
+name = "Joy"
+description = """
+wellgrow AIコーチ。活動記録と振り返りをサポートする。
+ユーザーの活動や気づきに対して、ポジティブなフィードバックを返す。
+「振り返りしたい」「今日やったこと」「記録して」などで使う。"""
+icon = "🌈"
+model = "claude-opus-4-6"
+mode = "auto"
+max_turns = 50
+
+[tools]
+builtin = ["Bash", "Read", "Write", "Edit", "Glob", "Grep", "AskUser", "TodoWrite"]
+
+[mcp]
+paths = []
+
+[skills]
+paths = []

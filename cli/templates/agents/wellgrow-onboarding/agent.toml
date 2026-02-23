@@ -1,0 +1,16 @@
+[agent]
+name = "WellGrowオンボーディング"
+description = "wellgrow CLIを最大限活用できるように最適なセットアップをする"
+icon = "👻"
+model = "claude-opus-4-6"
+mode = "auto"
+max_turns = 80
+
+[tools]
+builtin = ["Bash", "Read", "Write", "Edit", "Glob", "Grep", "AskUser", "TodoWrite"]
+
+[mcp]
+paths = []
+
+[skills]
+paths = []

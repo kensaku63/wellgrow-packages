@@ -1,0 +1,9 @@
+export const MAX_READ_LINES = 2000;
+export const LINE_TRUNCATION = 2000;
+export const MAX_BASH_OUTPUT_CHARS = 30000;
+export const MAX_BASH_OUTPUT_BYTES = 1_048_576; // 1 MiB hard cap during accumulation (OOM prevention)
+export const BASH_DEFAULT_TIMEOUT = 120000;
+export const BASH_MAX_TIMEOUT = 600000;
+export const BASH_IO_DRAIN_TIMEOUT = 2000; // ms to wait for remaining I/O after process exit
+export const BASH_BACKGROUND_FLUSH_INTERVAL = 500;
+export const GLOB_MAX_FILES = 100;
