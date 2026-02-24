@@ -22,7 +22,6 @@ export interface CreateSessionOptions {
   agentName?: string;
   modelOverride?: string;
   modeOverride?: Mode;
-  sessionStartSource?: string;
   onMcpConnection?: (result: McpConnectionResult) => void;
 }
 
@@ -44,12 +43,6 @@ export async function createSession(
     ctx,
   );
 
-  if (agent.hookEngine) {
-    await agent.hookEngine.fire("SessionStart", {
-      source: options.sessionStartSource ?? "startup",
-    });
-  }
-
   return { ctx, messages: [], agent };
 }
 
@@ -60,12 +53,6 @@ export async function switchAgent(
     onMcpConnection?: (result: McpConnectionResult) => void;
   },
 ): Promise<void> {
-  if (session.agent.hookEngine) {
-    await session.agent.hookEngine.fire("SessionEnd", {
-      reason: "agent_switch",
-    });
-  }
-
   if (session.agent.mcpManager) {
     await session.agent.mcpManager.disconnectAll();
     session.ctx.mcpManager = null;
@@ -103,36 +90,7 @@ export async function sendMessage(
   callbacks: AgentLoopCallbacks,
   options?: SendMessageOptions,
 ): Promise<SendMessageResult> {
-  const hookEngine = session.agent.hookEngine;
-
-  if (hookEngine) {
-    const submitResult = await hookEngine.fire("UserPromptSubmit", {
-      prompt: userMessage,
-    });
-    if (submitResult.blocked) {
-      return {
-        fullText: submitResult.reason ?? "",
-        parts: [],
-      };
-    }
-  }
-
   session.messages.push({ role: "user", content: userMessage });
-
-  const executionHooks = hookEngine?.createToolExecutionHooks();
-
-  const onStop = hookEngine
-    ? async (lastMessage: string) => {
-        const result = await hookEngine.fire("Stop", {
-          stop_hook_active: true,
-          last_assistant_message: lastMessage,
-        });
-        return {
-          blocked: result.blocked,
-          reason: result.reason,
-        };
-      }
-    : undefined;
 
   return runAgentLoop(
     session.messages,
@@ -141,8 +99,6 @@ export async function sendMessage(
       system: session.agent.systemPrompt,
       registry: session.agent.registry,
       pipeline: session.agent.pipeline,
-      executionHooks,
-      onStop,
       abortSignal: options?.abortSignal,
       maxTurns: options?.maxTurns ?? session.agent.maxTurns,
       maxRetries: options?.maxRetries,

@@ -32,9 +32,6 @@ export const wellGrowConfigSchema = z.object({
   mcp: z.object({
     paths: z.array(z.string()),
   }),
-  hooks: z.object({
-    paths: z.array(z.string()),
-  }),
   user: z.object({
     name: z.string().optional(),
   }).optional(),

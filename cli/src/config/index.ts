@@ -49,9 +49,6 @@ const DEFAULT_CONFIG: WellGrowConfig = {
   mcp: {
     paths: [],
   },
-  hooks: {
-    paths: [],
-  },
   logging: {
     verbose: false,
     log_dir: "~/.wellgrow/logs",

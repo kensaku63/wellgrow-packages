@@ -18,7 +18,6 @@ import {
   type McpConnectionResult,
 } from "../extensions/mcp.js";
 import { discoverSkills } from "../extensions/skills.js";
-import { HookEngine, loadHooksConfig } from "../extensions/hook-engine.js";
 
 export interface ResolvedAgent {
   name: string;
@@ -30,7 +29,6 @@ export interface ResolvedAgent {
   registry: ToolRegistry;
   pipeline: ToolPipeline;
   mcpManager: McpManager | null;
-  hookEngine: HookEngine | null;
   maxTurns: number;
 }
 
@@ -137,22 +135,6 @@ export async function resolveAgent(
     allowedMcps: config.permissions.allowed_mcps,
   });
 
-  // --- Hooks ---
-  const hookPaths = [
-    ...config.hooks.paths,
-    ...(agentConfig.hooks?.paths ?? []),
-  ];
-  const hooksConfig = await loadHooksConfig(hookPaths);
-
-  let hookEngine: HookEngine | null = null;
-  if (Object.keys(hooksConfig.hooks).length > 0) {
-    hookEngine = new HookEngine(hooksConfig, {
-      sessionId: sessionCtx.sessionId,
-      cwd: sessionCtx.cwd,
-      config,
-    });
-  }
-
   let finalSystemPrompt = systemPrompt;
   if (mcpFailures.length > 0) {
     finalSystemPrompt += `\n\n<mcp_status>\n以下の MCP サーバーは利用できません。これらのツールは使用しないでください:\n${mcpFailures.map((f) => `- ${f}`).join("\n")}\n</mcp_status>`;
@@ -168,7 +150,6 @@ export async function resolveAgent(
     registry,
     pipeline,
     mcpManager,
-    hookEngine,
     maxTurns,
   };
 }

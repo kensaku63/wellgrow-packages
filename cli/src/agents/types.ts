@@ -24,11 +24,6 @@ export const agentConfigSchema = z.object({
       paths: z.array(z.string()).optional(),
     })
     .optional(),
-  hooks: z
-    .object({
-      paths: z.array(z.string()).optional(),
-    })
-    .optional(),
 });
 
 export type AgentConfig = z.infer<typeof agentConfigSchema>;

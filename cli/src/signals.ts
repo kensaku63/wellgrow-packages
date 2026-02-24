@@ -1,6 +1,5 @@
 import type { ChildProcess } from "node:child_process";
 import type { SessionContext, AbortState } from "./core/context.js";
-import type { HookEngine } from "./extensions/hook-engine.js";
 
 type ShutdownHandler = () => Promise<void>;
 
@@ -10,14 +9,9 @@ let isShuttingDown = false;
 let lastSigintTime = 0;
 
 let activeCtx: SessionContext | null = null;
-let activeHookEngine: HookEngine | null = null;
 
-export function setActiveSession(
-  ctx: SessionContext | null,
-  hookEngine: HookEngine | null,
-): void {
+export function setActiveSession(ctx: SessionContext | null): void {
   activeCtx = ctx;
-  activeHookEngine = hookEngine;
 }
 
 export function registerShutdownHandler(handler: ShutdownHandler): void {
@@ -90,29 +84,11 @@ async function cleanupMcpClients(): Promise<void> {
   }
 }
 
-async function fireSessionEndHook(reason: string): Promise<void> {
-  if (!activeHookEngine) return;
-  try {
-    await Promise.race([
-      activeHookEngine.fire("SessionEnd", { reason }),
-      new Promise((r) => setTimeout(r, 5000)),
-    ]);
-  } catch {
-    // ignore hook errors during shutdown
-  }
-}
-
 async function gracefulShutdown(_reason: string): Promise<void> {
   if (isShuttingDown) {
     process.exit(1);
   }
   isShuttingDown = true;
-
-  const hookReason =
-    _reason === "sigint" || _reason === "sigint_double"
-      ? "prompt_input_exit"
-      : "other";
-  await fireSessionEndHook(hookReason);
 
   for (const handler of shutdownHandlers) {
     try {

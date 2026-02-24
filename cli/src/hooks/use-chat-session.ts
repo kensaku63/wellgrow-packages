@@ -107,7 +107,7 @@ export function useChatSession({
       setCurrentAgentName(s.agent.name);
       setCurrentAgentIcon(s.agent.icon);
       setAgents(agentList);
-      setActiveSession(s.ctx, s.agent.hookEngine);
+      setActiveSession(s.ctx);
       registerShutdownHandler(async () => {
         if (recorderRef.current) {
           await recorderRef.current.finalize(messageCountRef.current);
@@ -172,7 +172,7 @@ export function useChatSession({
         setCurrentModelName(getModelDisplayName(session.agent.modelId));
         setCurrentAgentName(session.agent.name);
         setCurrentAgentIcon(session.agent.icon);
-        setActiveSession(session.ctx, session.agent.hookEngine);
+        setActiveSession(session.ctx);
 
         recorderRef.current = await createSessionRecorder(
           getModelDisplayName(session.agent.modelId),
@@ -198,10 +198,6 @@ export function useChatSession({
     const session = sessionRef.current;
     if (!session) return;
 
-    if (session.agent.hookEngine) {
-      await session.agent.hookEngine.fire("SessionEnd", { reason: "clear" });
-    }
-
     if (recorderRef.current) {
       await recorderRef.current.finalize(messageCountRef.current);
     }
@@ -211,7 +207,6 @@ export function useChatSession({
       agentName: currentAgentId,
       modelOverride,
       modeOverride: mode,
-      sessionStartSource: "clear",
     });
     if (verbose) {
       newSession.ctx.logFile = await initLogger(
@@ -224,7 +219,7 @@ export function useChatSession({
     setCurrentModelName(getModelDisplayName(newSession.agent.modelId));
     setCurrentAgentName(newSession.agent.name);
     setCurrentAgentIcon(newSession.agent.icon);
-    setActiveSession(newSession.ctx, newSession.agent.hookEngine);
+    setActiveSession(newSession.ctx);
     recorderRef.current = await createSessionRecorder(
       getModelDisplayName(newSession.agent.modelId),
       currentAgentId,

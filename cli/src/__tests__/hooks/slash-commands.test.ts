@@ -10,7 +10,6 @@ function createMockContext(
   return {
     session: {
       agent: {
-        hookEngine: null,
         pipeline: {
           mode: "auto",
           setMode: vi.fn(),
@@ -63,16 +62,6 @@ describe("handleSlashCommand", () => {
       expect(recorder.finalize).toHaveBeenCalledWith(5);
     });
 
-    it("fires SessionEnd hook on exit", async () => {
-      const fire = vi.fn(async () => {});
-      const ctx = createMockContext({
-        session: {
-          agent: { hookEngine: { fire }, pipeline: { mode: "auto", setMode: vi.fn() } },
-        } as unknown as SlashCommandContext["session"],
-      });
-      await handleSlashCommand("exit", ctx);
-      expect(fire).toHaveBeenCalledWith("SessionEnd", { reason: "prompt_input_exit" });
-    });
   });
 
   describe("/clear", () => {

@@ -30,11 +30,6 @@ export async function handleSlashCommand(
 ): Promise<boolean> {
   if (text === "exit" || text === "quit") {
     ctx.cancelAllAskUser();
-    if (ctx.session.agent.hookEngine) {
-      await ctx.session.agent.hookEngine
-        .fire("SessionEnd", { reason: "prompt_input_exit" })
-        .catch(() => {});
-    }
     if (ctx.recorder) {
       await ctx.recorder.finalize(ctx.messageCountRef.current);
     }

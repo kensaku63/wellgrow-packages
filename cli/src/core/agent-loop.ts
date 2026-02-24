@@ -21,8 +21,6 @@ import {
 } from "./tool-executor.js";
 
 export type {
-  ToolApprovalDecision,
-  ToolExecutionHooks,
   ToolCall,
   ToolExecutorConfig,
   ToolExecutorCallbacks,
@@ -42,10 +40,6 @@ export interface AgentLoopCallbacks extends ToolExecutorCallbacks {
 export interface AgentLoopConfig extends ToolExecutorConfig {
   model: LanguageModel;
   system: string;
-  onStop?: (lastMessage: string) => Promise<{
-    blocked: boolean;
-    reason?: string;
-  }>;
   maxTurns?: number;
   maxRetries?: number;
   maxOutputTokens?: number;
@@ -73,17 +67,6 @@ export async function runAgentLoop(
     fullText += turnResult.text;
 
     if (turnResult.finishReason !== "tool-calls") {
-      if (config.onStop) {
-        const stopResult = await config.onStop(turnResult.text);
-        if (stopResult.blocked && stopResult.reason) {
-          messages.push({
-            role: "user",
-            content: stopResult.reason,
-          });
-          turnsUsed++;
-          continue;
-        }
-      }
       break;
     }
 
