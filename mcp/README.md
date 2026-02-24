@@ -7,6 +7,7 @@ WellGrow MCP Server — AI エージェントからユーザーのパーソナ�
 - **search_user_context** — 質問・回答をセマンティック検索
 - **list_questions** — 質問一覧を取得（タグ・ステータスでフィルタ可）
 - **answer_question** — 質問に対して回答を書き込む
+- **save_feedback** — WellGrow 開発チームへフィードバックを送信
 - **active-questions** リソース — アクティブな質問一覧（`@wellgrow` で参照）
 
 ## セットアップ
@@ -80,6 +81,9 @@ AI: → search_user_context → 検索結果を表示
 
 ユーザー: 「この質問に『毎朝5分の瞑想から始める』と回答して」
 AI: → answer_question → 回答を保存
+
+ユーザー: 「WellGrowの検索、もっとタグでフィルタできるといいな」
+AI: → save_feedback(improvement) → フィードバックを開発チームに送信
 ```
 
 ## 開発

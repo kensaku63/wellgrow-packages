@@ -4,6 +4,7 @@ import { getSupabase } from "./auth.js";
 import { registerSearchContextTool } from "./tools/search-context.js";
 import { registerAnswerQuestionTool } from "./tools/answer-question.js";
 import { registerListQuestionsTool } from "./tools/list-questions.js";
+import { registerSaveFeedbackTool } from "./tools/save-feedback.js";
 import { registerQuestionsResource } from "./resources/questions.js";
 
 const required = ["WELLGROW_EMAIL", "WELLGROW_PASSWORD", "OPENAI_API_KEY"];
@@ -27,7 +28,7 @@ try {
 }
 
 const server = new McpServer(
-  { name: "wellgrow", version: "0.2.0" },
+  { name: "wellgrow", version: "0.3.0" },
   {
     instructions: `WellGrow のユーザーナレッジベースにアクセスするサーバーです。
 ユーザーの質問・回答データの検索・閲覧・書き込みができます。
@@ -38,6 +39,7 @@ const server = new McpServer(
 registerSearchContextTool(server);
 registerAnswerQuestionTool(server);
 registerListQuestionsTool(server);
+registerSaveFeedbackTool(server);
 registerQuestionsResource(server);
 
 const transport = new StdioServerTransport();

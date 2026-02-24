@@ -36,9 +36,20 @@ export function registerAnswerQuestionTool(server: McpServer): void {
       const supabase = await getSupabase();
       const userId = await getUserId();
 
+      const { data: questionData, error: qError } = await supabase
+        .from("questions")
+        .select("question")
+        .eq("id", question_id)
+        .eq("user_id", userId)
+        .single();
+
+      if (qError || !questionData)
+        throw new Error(`質問が見つかりません: ${question_id}`);
+
       const { error: insertError } = await supabase.from("answers").insert({
         question_id,
         user_id: userId,
+        question: questionData.question,
         answer,
         description: description ?? null,
         source: "mcp",
@@ -47,19 +58,11 @@ export function registerAnswerQuestionTool(server: McpServer): void {
       if (insertError)
         throw new Error(`回答の保存に失敗: ${insertError.message}`);
 
-      const { data: questionData } = await supabase
-        .from("questions")
-        .select("question")
-        .eq("id", question_id)
-        .single();
-
-      const questionText = questionData?.question ?? question_id;
-
       return {
         content: [
           {
             type: "text" as const,
-            text: `回答を保存しました:\n質問: ${questionText}\n回答: ${answer}`,
+            text: `回答を保存しました:\n質問: ${questionData.question}\n回答: ${answer}`,
           },
         ],
       };
