@@ -173,12 +173,17 @@ export class CliOAuthProvider implements OAuthClientProvider {
   }
 
   async redirectToAuthorization(authorizationUrl: URL): Promise<void> {
-    process.stderr.write(
-      `[OAuth] ブラウザで認証してください: ${authorizationUrl.toString()}\n`,
-    );
+    const url = authorizationUrl.toString();
+    process.stderr.write(`[OAuth] ブラウザで認証してください: ${url}\n`);
 
-    const open = (await import("open")).default;
-    await open(authorizationUrl.toString());
+    try {
+      const open = (await import("open")).default;
+      await open(url);
+    } catch {
+      process.stderr.write(
+        "[OAuth] ブラウザを自動で開けませんでした。上記の URL を手動でブラウザに貼り付けてください。\n",
+      );
+    }
 
     if (this.codePromise) {
       const code = await this.codePromise;

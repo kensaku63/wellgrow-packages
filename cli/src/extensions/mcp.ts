@@ -199,9 +199,9 @@ export class McpManager {
         authProvider = new CliOAuthProvider(name, config.url);
         try {
           await preAuthenticate(authProvider, config.url);
-        } catch {
-          // OAuth not supported by this server — continue without auth
-          authProvider = undefined;
+        } catch (error) {
+          const message = error instanceof Error ? error.message : String(error);
+          process.stderr.write(`[MCP] ${name}: OAuth 認証に失敗しました: ${message}\n`);
         }
       }
 

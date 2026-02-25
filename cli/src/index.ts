@@ -16,6 +16,8 @@ import { registerInitCommand } from "./commands/init.js";
 import { registerDoctorCommand } from "./commands/doctor.js";
 import { registerSkillsCommand } from "./commands/skills.js";
 import { registerCommandsCommand } from "./commands/custom/index.js";
+import { registerUpdateCommand } from "./commands/update.js";
+import { checkForUpdate } from "./update.js";
 import { runOnboardingWizard } from "./ui/onboarding-wizard.js";
 import type { Mode } from "./tools/pipeline.js";
 
@@ -195,5 +197,6 @@ registerInitCommand(program);
 registerDoctorCommand(program);
 registerSkillsCommand(program);
 registerCommandsCommand(program);
+registerUpdateCommand(program);
 
-program.parse();
+checkForUpdate().then(() => program.parse());

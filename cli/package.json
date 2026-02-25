@@ -1,6 +1,6 @@
 {
   "name": "@wellgrow/cli",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "WellGrow CLI — AI chat assistant with agent system",
   "type": "module",
   "bin": {
