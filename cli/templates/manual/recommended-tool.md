@@ -22,12 +22,12 @@ wellgrow skills remove <name>  # スキルの削除
 
 ## WellGrow MCP
 
-ユーザーの質問・回答データ（パーソナルナレッジベース）にアクセスする MCP サーバー。セマンティック検索・一覧取得・回答の書き込みができる。ユーザーの考えや価値観を参照し、その人らしい支援を提供するための基盤。
+ユーザーの質問・回答データ（パーソナルナレッジベース）にアクセスするリモート MCP サーバー。セマンティック検索・一覧取得・回答の書き込みができる。ユーザーの考えや価値観を参照し、その人らしい支援を提供するための基盤。OAuth 認証対応で、初回接続時にブラウザでログインするだけで利用可能。
 
-- **インストール**: 不要（`npx` で自動実行）
-- **ユーザー操作**: 環境変数 `WELLGROW_EMAIL`, `WELLGROW_PASSWORD`, `OPENAI_API_KEY` の設定。`~/.wellgrow/.mcp.json` への追記（[MCP 設定参考](mcp.md)）
+- **インストール**: 不要（リモート MCP サーバー）
+- **ユーザー操作**: `~/.wellgrow/.mcp.json` への追記（[MCP 設定参考](mcp.md)）。初回接続時に OAuth 認証
 - **スキル**: `wellgrow-mcp`, `wellgrow-setup`（`wellgrow skills add kensaku63/wellgrow-packages`）
-- **URL**: https://www.npmjs.com/package/@wellgrow/mcp
+- **URL**: https://wellgrow.ai/api/mcp
 
 `.mcp.json` に追加する設定:
 
@@ -35,8 +35,8 @@ wellgrow skills remove <name>  # スキルの削除
 {
   "mcpServers": {
     "wellgrow": {
-      "command": "npx",
-      "args": ["-y", "@wellgrow/mcp"]
+      "type": "http",
+      "url": "https://wellgrow.ai/api/mcp"
     }
   }
 }

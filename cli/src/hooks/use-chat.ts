@@ -162,6 +162,9 @@ export function useChat({
         switchModel,
         switchAgent,
         addSystemMessage,
+        submitPrompt: (prompt: string) => {
+          setTimeout(() => handleSubmitRef.current(prompt), 0);
+        },
         onExit,
       });
       if (handled) return;

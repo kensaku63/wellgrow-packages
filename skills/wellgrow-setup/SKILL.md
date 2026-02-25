@@ -79,33 +79,31 @@ CLI をインストールしない場合、WellGrow MCP を手動で設定する
 
 ### Step B-1: 情報の確認
 
-ユーザーに以下を聞く：
+ユーザーにどのツールで使うか聞く。
+WellGrow MCP はリモートサーバーのため、API キーや認証情報の事前設定は不要。初回接続時にブラウザで OAuth ログインする。
 
-1. **使用ツール** — Claude Code か Cursor か
-2. **WellGrow アカウント** — メールアドレスとパスワード
-3. **OpenAI API キー** — 未取得なら https://platform.openai.com/api-keys を案内
+### Step B-2: MCP サーバーの登録
 
-> Supabase の接続情報はパッケージに組み込み済みのため、ユーザーへの確認は不要。
+#### ChatGPT アプリ
 
-### Step B-2: MCP のグローバルインストール
+1. 設定 → アプリ → 「アプリを作成する（高度な設定）」を開く
+2. 名前に `wellgrow` を入力
+3. MCP サーバー URL に `https://wellgrow.ai/api/mcp` を入力
+4. 保存して、OAuth ログインを完了する
 
-```bash
-npm install -g @wellgrow/mcp
-```
+#### Claude アプリ
 
-グローバルインストールにより `wellgrow-mcp` コマンドが使えるようになり、起動が高速になる。
-
-### Step B-3: MCP サーバーの登録
+1. 設定 → コネクタ → 「カスタムコネクタを追加」を開く
+2. 名前に `wellgrow` を入力
+3. リモート MCP サーバー URL に `https://wellgrow.ai/api/mcp` を入力
+4. 保存して、OAuth ログインを完了する
 
 #### Claude Code
 
 ```bash
-claude mcp add --transport stdio \
-  --env WELLGROW_EMAIL=<email> \
-  --env WELLGROW_PASSWORD=<password> \
-  --env OPENAI_API_KEY=<openai_key> \
+claude mcp add --transport http \
   --scope user \
-  wellgrow -- wellgrow-mcp
+  wellgrow https://wellgrow.ai/api/mcp
 ```
 
 `--scope user` で全プロジェクトから利用可能。
@@ -118,18 +116,14 @@ claude mcp add --transport stdio \
 {
   "mcpServers": {
     "wellgrow": {
-      "command": "wellgrow-mcp",
-      "env": {
-        "WELLGROW_EMAIL": "<email>",
-        "WELLGROW_PASSWORD": "<password>",
-        "OPENAI_API_KEY": "<openai_key>"
-      }
+      "type": "http",
+      "url": "https://wellgrow.ai/api/mcp"
     }
   }
 }
 ```
 
-### Step B-4: MCP の動作確認
+### Step B-3: MCP の動作確認
 
 MCP の `list_questions` ツールを呼び出して接続を確認する。
 質問一覧が返ってくれば成功。
@@ -149,15 +143,12 @@ MCP の `list_questions` ツールを呼び出して接続を確認する。
 
 | エラー | 対処 |
 |--------|------|
-| `Authentication failed` | メール / パスワードを確認 |
-| `OPENAI_API_KEY is required` | OpenAI API キーを確認 |
-| `wellgrow-mcp: command not found` | `npm install -g @wellgrow/mcp` を再実行。Node.js のグローバル bin が PATH に含まれているか確認 |
+| OAuth ログイン画面が開かない | ブラウザがデフォルトブラウザとして設定されているか確認 |
+| 認証後もツールが使えない | MCP サーバーの設定を確認し、`url` が `https://wellgrow.ai/api/mcp` になっているか確認 |
 | 接続タイムアウト | ネットワーク接続を確認 |
-| パスワード変更後に認証失敗 | env のパスワードを新しいものに更新 |
 
 ## アップデート
 
 ```bash
 npm update -g @wellgrow/cli    # CLI
-npm update -g @wellgrow/mcp    # MCP
 ```

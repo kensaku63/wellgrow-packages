@@ -15,6 +15,7 @@ import { registerHistoryCommand } from "./commands/history.js";
 import { registerInitCommand } from "./commands/init.js";
 import { registerDoctorCommand } from "./commands/doctor.js";
 import { registerSkillsCommand } from "./commands/skills.js";
+import { registerCommandsCommand } from "./commands/custom/index.js";
 import { runOnboardingWizard } from "./ui/onboarding-wizard.js";
 import type { Mode } from "./tools/pipeline.js";
 
@@ -193,5 +194,6 @@ registerHistoryCommand(program);
 registerInitCommand(program);
 registerDoctorCommand(program);
 registerSkillsCommand(program);
+registerCommandsCommand(program);
 
 program.parse();

@@ -30,7 +30,7 @@ describe("loadMcpConfigFile", () => {
       filePath,
       JSON.stringify({
         mcpServers: {
-          wellgrow: { type: "stdio", command: "wellgrow-mcp" },
+          wellgrow: { type: "http", url: "https://wellgrow.ai/api/mcp" },
           supabase: { command: "supabase-mcp", args: ["--flag"] },
         },
       }),
@@ -40,7 +40,7 @@ describe("loadMcpConfigFile", () => {
 
     expect(config.mcpServers).toHaveProperty("wellgrow");
     expect(config.mcpServers).toHaveProperty("supabase");
-    expect(config.mcpServers.wellgrow.command).toBe("wellgrow-mcp");
+    expect(config.mcpServers.wellgrow.url).toBe("https://wellgrow.ai/api/mcp");
     expect(config.mcpServers.supabase.args).toEqual(["--flag"]);
   });
 
@@ -174,7 +174,7 @@ describe("mergeMcpConfigs", () => {
   it("merges global and agent configs", () => {
     const global: McpConfig = {
       mcpServers: {
-        wellgrow: { command: "wellgrow-mcp" },
+        wellgrow: { type: "http", url: "https://wellgrow.ai/api/mcp" },
         supabase: { command: "supabase-mcp" },
       },
     };

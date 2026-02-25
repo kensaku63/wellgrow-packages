@@ -21,6 +21,7 @@ export async function runInit(): Promise<void> {
   await mkdir(join(WELLGROW_HOME, "skills"), { recursive: true });
   await mkdir(join(WELLGROW_HOME, "hooks"), { recursive: true });
   await mkdir(join(WELLGROW_HOME, "mcp"), { recursive: true });
+  await mkdir(join(WELLGROW_HOME, "commands"), { recursive: true });
 
   for (const agentName of BUILTIN_AGENTS) {
     const src = join(templatesDir, "agents", agentName);

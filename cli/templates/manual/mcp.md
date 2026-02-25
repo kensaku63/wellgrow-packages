@@ -23,12 +23,8 @@ paths = [
 {
   "mcpServers": {
     "wellgrow": {
-      "command": "wellgrow-mcp",
-      "env": {
-        "WELLGROW_EMAIL": "you@example.com",
-        "WELLGROW_PASSWORD": "your-password",
-        "OPENAI_API_KEY": "sk-..."
-      }
+      "type": "http",
+      "url": "https://wellgrow.ai/api/mcp"
     }
   }
 }
@@ -37,3 +33,21 @@ paths = [
 `type` は `"stdio"`（デフォルト）、`"http"`、`"sse"` に対応。`http`/`sse` の場合は `command` の代わりに `url` を指定する。
 
 同名サーバーは後勝ち（agent.toml 側が優先）。
+
+## アプリでの MCP 設定
+
+ChatGPT や Claude のアプリからも MCP サーバーに接続できる。CLI を使わずブラウザだけで完結する。
+
+### ChatGPT
+
+1. 設定 → アプリ → 「アプリを作成する（高度な設定）」を開く
+2. 名前に `wellgrow` を入力
+3. MCP サーバー URL に `https://wellgrow.ai/api/mcp` を入力
+4. 保存して、OAuth ログインを完了する
+
+### Claude
+
+1. 設定 → コネクタ → 「カスタムコネクタを追加」を開く
+2. 名前に `wellgrow` を入力
+3. リモート MCP サーバー URL に `https://wellgrow.ai/api/mcp` を入力
+4. 保存して、OAuth ログインを完了する

@@ -30,6 +30,7 @@ function createMockContext(
     switchModel: vi.fn(() => ({ message: "モデルを切り替えました" })),
     switchAgent: vi.fn(async () => ({ success: true, message: "切り替え完了" })),
     addSystemMessage: vi.fn(),
+    submitPrompt: vi.fn(),
     onExit: vi.fn(),
     ...overrides,
   };

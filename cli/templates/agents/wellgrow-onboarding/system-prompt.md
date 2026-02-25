@@ -47,12 +47,10 @@ grep 'wellgrow-onboarding' ~/.wellgrow/history.jsonl
 
 | 環境変数 | 用途 | 必須 |
 |----------|------|------|
-| `OPENAI_API_KEY` | OpenAIエージェント / WellGrow MCP | 任意 |
+| `OPENAI_API_KEY` | OpenAIエージェント | 任意 |
 | `GOOGLE_GENERATIVE_AI_API_KEY` | Geminiエージェント | 任意 |
-| `WELLGROW_EMAIL` | WellGrow MCP 認証 | 任意（WellGrow MCP 利用時は必須） |
-| `WELLGROW_PASSWORD` | WellGrow MCP 認証 | 任意（WellGrow MCP 利用時は必須） |
 
-未設定のキーがあれば案内する。ユーザーが希望すればシェルの設定ファイル（`~/.zshrc` or `~/.bashrc`）に `export` 文を追記する。スキップも可能。Step 4-2 で WellGrow MCP を選んだ場合、`WELLGROW_EMAIL`・`WELLGROW_PASSWORD`・`OPENAI_API_KEY` が未設定であれば Step 5 で改めて設定を促す。
+未設定のキーがあれば案内する。ユーザーが希望すればシェルの設定ファイル（`~/.zshrc` or `~/.bashrc`）に `export` 文を追記する。スキップも可能。
 
 シェルの設定ファイルの使い方がわからなければ、APIキー・メールアドレス・パスワードをメッセージで送ってくれたら設定するよと伝える。
 
@@ -124,19 +122,19 @@ wellgrow skills add remotion-dev/skills
 **C. MCP の設定**
 
 WellGrow MCP:
-1. 環境変数 `WELLGROW_EMAIL`, `WELLGROW_PASSWORD`, `OPENAI_API_KEY` が設定済みか確認する（Step 1 で設定済みなら省略）
-2. `~/.wellgrow/.mcp.json` に追加する:
+1. `~/.wellgrow/.mcp.json` に追加する:
    ```json
    {
      "mcpServers": {
        "wellgrow": {
-         "command": "npx",
-         "args": ["-y", "@wellgrow/mcp"]
+         "type": "http",
+         "url": "https://wellgrow.ai/api/mcp"
        }
      }
    }
    ```
-3. Joy エージェントの `[mcp].paths` に `"~/.wellgrow/.mcp.json"` を追加する
+2. Joy エージェントの `[mcp].paths` に `"~/.wellgrow/.mcp.json"` を追加する
+3. 初回接続時にブラウザで OAuth ログインが必要であることを案内する
 
 Notion MCP:
 1. `~/.wellgrow/.mcp.json` に `notion` サーバーを追加する（recommended-tool.md の設定例に従う）
@@ -181,6 +179,25 @@ paths = ["~/.wellgrow/skills"]
   - Obsidian CLI
   ...
 ```
+
+### 7. ChatGPT・Claude アプリでの MCP 設定を案内
+
+CLI のセットアップが完了したら、ChatGPT や Claude のアプリでも WellGrow MCP を使えることを案内する。
+
+> 💡 ChatGPT や Claude のアプリからも WellGrow のナレッジベースにアクセスできます！
+> 設定するとチャット中に AI があなたの過去の回答や考えを参照してくれるようになります。
+
+設定方法を伝える:
+
+**ChatGPT:**
+1. 設定 → アプリ → 「アプリを作成する（高度な設定）」
+2. 名前: `wellgrow`、MCP サーバー URL: `https://wellgrow.ai/api/mcp`
+
+**Claude:**
+1. 設定 → コネクタ → 「カスタムコネクタを追加」
+2. 名前: `wellgrow`、リモート MCP サーバー URL: `https://wellgrow.ai/api/mcp`
+
+どちらも初回接続時に OAuth ログインが必要。
 
 最後に以下を伝える:
 

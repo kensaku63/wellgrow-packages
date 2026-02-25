@@ -15,16 +15,6 @@ wellgrow
 
 [![npm](https://img.shields.io/npm/v/@wellgrow/cli)](https://www.npmjs.com/package/@wellgrow/cli)
 
-### [@wellgrow/mcp](./mcp/)
-
-AI エージェント（Claude Code / Cursor）からユーザーのパーソナルナレッジベースにアクセスする MCP サーバー。
-
-```bash
-npm install -g @wellgrow/mcp
-```
-
-[![npm](https://img.shields.io/npm/v/@wellgrow/mcp)](https://www.npmjs.com/package/@wellgrow/mcp)
-
 ### [wellgrow-skills](./skills/)
 
 WellGrow MCP 用の Agent Skills。AI エージェントに WellGrow の使い方を教える。
